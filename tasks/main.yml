@@ -1,0 +1,11 @@
+---
+
+- include: install.yml
+  tags: [pgbouncer, pgbouncer-install]
+
+- include: configure.yml
+  tags: [pgbouncer, pgbouncer-configure]
+
+- include: monit.yml
+  when: monit_protection is defined and monit_protection == true
+  tags: [pgbouncer, pgbouncer-monit]

@@ -1,0 +1,8 @@
+---
+
+- name: install required pgbouncer packages
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ pgbouncer_packages }}"
+

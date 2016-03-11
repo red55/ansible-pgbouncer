@@ -1,0 +1,63 @@
+---
+
+- name: Create "/var/log/postgresql/" directory with necessary privileges
+  file:
+    dest: "/var/log/postgresql/"
+    owner: "{{ pgbouncer_user }}"
+    group: "{{ pgbouncer_group }}"
+    mode: 0755
+    state: directory
+
+- name: Divert pgbouncer main configuration file {{ pgbouncer_confdir }}/pgbouncer.ini
+  command: dpkg-divert --quiet --local --divert {{ pgbouncer_confdir }}/pgbouncer.ini.dpkg-divert --rename {{ pgbouncer_confdir }}/pgbouncer.ini
+  args:
+    creates: "{{ pgbouncer_confdir }}/pgbouncer.ini.dpkg-divert"
+
+- name: pgbouncer main configuration file {{ pgbouncer_confdir }}/pgbouncer.ini
+  template:
+    src: pgbouncer.ini.j2
+    dest: "{{ pgbouncer_confdir }}/pgbouncer.ini"
+    owner: "{{ pgbouncer_user }}"
+    group: "{{ pgbouncer_group }}"
+    mode: 0640
+  notify:
+    - restart pgbouncer
+
+- name: Divert pgbouncer hba file {{ pgbouncer_confdir }}/pgbouncer_hba.conf
+  command: dpkg-divert --quiet --local --divert {{ pgbouncer_confdir }}/pgbouncer_hba.conf.dpkg-divert --rename {{ pgbouncer_confdir }}/pgbouncer_hba.conf
+  args:
+    creates: "{{ pgbouncer_confdir }}/pgbouncer_hba.conf.dpkg-divert"
+
+- name: pgbouncer hba file {{ pgbouncer_confdir }}/pgbouncer_hba.conf
+  template:
+    src: pgbouncer_hba.conf.j2
+    dest: "{{ pgbouncer_confdir }}/pgbouncer_hba.conf"
+    owner: "{{ pgbouncer_user }}"
+    group: "{{ pgbouncer_group }}"
+    mode: 0640
+  notify:
+    - restart pgbouncer
+
+- name: Divert pgbouncer user list file {{ pgbouncer_confdir }}/userlist.txt
+  command: dpkg-divert --quiet --local --divert {{ pgbouncer_confdir }}/userlist.txt.dpkg-divert --rename {{ pgbouncer_confdir }}/userlist.txt
+  args:
+    creates: "{{ pgbouncer_confdir }}/userlist.txt.dpkg-divert"
+
+- name: add users to userlist.txt
+  copy:
+    dest: "{{ pgbouncer_confdir }}/userlist.txt"
+    owner: "{{ pgbouncer_user }}"
+    group: "{{ pgbouncer_group }}"
+    mode: 0640
+    content: |
+      {% for user in pgbouncer_users %}
+      "{{ user.name }}" "md5{{ (user.pass + user.name) | hash('md5') }}"
+      {% endfor %}
+  notify:
+    - reload pgbouncer
+
+- name: ensure pgbouncer is running
+  service:
+    name: pgbouncer
+    state: started
+
