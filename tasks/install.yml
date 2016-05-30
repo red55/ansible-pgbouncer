@@ -3,6 +3,6 @@
 - name: install required pgbouncer packages
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: present
   with_items: "{{ pgbouncer_packages }}"
 
