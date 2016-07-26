@@ -3,6 +3,8 @@
 pgbouncer_packages:
   - pgbouncer
 
+pgbouncer_package_state: present
+
 pgbouncer_hba_default:
   - comment: unix socket connections
     type: local
@@ -101,4 +103,3 @@ pgbouncer_dns_zone_check_period: 0
 pgbouncer_dns_nxdomain_ttl: 15
 pgbouncer_service_name: pgbouncer
 pgbouncer_job_name: pgbouncer
-pgbouncer_pkg_update: latest
