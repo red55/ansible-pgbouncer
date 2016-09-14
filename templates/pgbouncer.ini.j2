@@ -23,6 +23,7 @@
 
 {% for db in pgbouncer_databases %}
 {{ db.name }} = {% for key, value in db.items() %}{% if key != 'name' %}{{ key }}={{ value }} {% endif %}{% endfor %}
+
 {% endfor %}
 
 ;; Configuration section
