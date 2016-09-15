@@ -56,6 +56,21 @@
   notify:
     - reload pgbouncer
 
+- name: Divert pgbouncer default file /etc/default/pgbouncer
+  command: dpkg-divert --quiet --local --divert /etc/default/pgbouncer.dpkg-divert --rename /etc/default/pgbouncer
+  args:
+    creates: "/etc/default/pgbouncer.dpkg-divert"
+
+- name: pgbouncer default file /etc/default/pgbouncer
+  template:
+    src: pgbouncer_default.j2
+    dest: "/etc/default/pgbouncer"
+    owner: "{{ pgbouncer_user }}"
+    group: "{{ pgbouncer_group }}"
+    mode: 0640
+  notify:
+    - restart pgbouncer
+
 - name: ensure pgbouncer is running
   service:
     name: pgbouncer
