@@ -148,8 +148,12 @@ reserve_pool_size = {{ pgbouncer_reserve_pool_size }}
 reserve_pool_timeout = {{ pgbouncer_reserve_pool_timeout }}
 
 ; how many total connections to a single database to allow from all pools
+{% if pgbouncer_max_db_connections != -1 %}
 max_db_connections = {{ pgbouncer_max_db_connections }}
+{% endif %}
+{% if pgbouncer_max_user_connections != -1 %}
 max_user_connections = {{ pgbouncer_max_user_connections }}
+{% endif %}
 
 ; If off, then server connections are reused in LIFO manner
 server_round_robin = {{ pgbouncer_server_round_robin }}
