@@ -66,8 +66,8 @@ pgbouncer_default_pool_size: 20
 pgbouncer_min_pool_size: 0
 pgbouncer_reserve_pool_size: 0
 pgbouncer_reserve_pool_timeout: 5
-pgbouncer_max_db_connections: unlimited
-pgbouncer_max_user_connections: unlimited
+pgbouncer_max_db_connections: 50
+pgbouncer_max_user_connections: 50
 pgbouncer_server_round_robin: 0
 pgbouncer_syslog: 0
 pgbouncer_syslog_facility: daemon
