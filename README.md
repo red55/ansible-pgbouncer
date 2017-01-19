@@ -3,6 +3,8 @@ pgbouncer
 
 This role configures PgBouncer PostgreSQL connection mux utility.
 
+Postgres server performance degrades when handling a high number of connection due to a 1:1 mapping of connection to Postgres backend processes. PgBouncer is a threaded pooler which can reduce the number of backend processes and the handshaking involved in setting up a new connection.
+
 Example minimal data requirements
 ---------------------------------
 
