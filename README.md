@@ -8,6 +8,8 @@ Postgres server performance degrades when handling a high number of connection d
 Example minimal data requirements
 ---------------------------------
 
+Ansible handles the templating of userlist.txt, including the md5 hashing.
+
     pgbouncer_users:
       - name: username
         pass: unencrypted_password
