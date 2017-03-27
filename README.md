@@ -5,7 +5,7 @@ This role configures PgBouncer PostgreSQL connection mux utility.
 
 Postgres server performance degrades when handling a high number of connection due to a 1:1 mapping of connection to Postgres backend processes. PgBouncer is a threaded pooler which can reduce the number of backend processes and the handshaking involved in setting up a new connection.
 
-Example minimal data requirements
+Example group vars
 ---------------------------------
 
 Ansible handles the templating of userlist.txt, including the md5 hashing.
@@ -15,6 +15,19 @@ Ansible handles the templating of userlist.txt, including the md5 hashing.
         pass: unencrypted_password
       - name: postgres
         host: unencrypted_password
+
+    pgbouncer_databases:
+      - name: "wibble"
+        host: wibble.example.com
+        port: 5432
+
+    pgbouncer_max_client_conn: 300
+    pgbouncer_max_db_connections: 300
+    pgbouncer_max_user_connections: 300
+
+    # govern how many backend connections
+    pgbouncer_default_pool_size: 80
+
 
 Debugging
 ---------
