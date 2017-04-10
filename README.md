@@ -28,6 +28,44 @@ Ansible handles the templating of userlist.txt, including the md5 hashing.
     # govern how many backend connections
     pgbouncer_default_pool_size: 80
 
+Requirements
+------------
+
+Module is tested with pgbouncer 1.7.2 from the pgdg repository so that is the recommended source for the binary.
+
+However we don't setup the repo here.
+
+Example playbook
+----------------
+
+---
+- hosts:  "{{ group }}"
+  serial: "{{ serial }}"
+  become: yes
+  vars:
+    pgbouncer_users:
+      - name: username
+        pass: unencrypted_password
+      - name: postgres
+        host: unencrypted_password
+
+    pgbouncer_databases:
+      - name: "wibble"
+        host: wibble.example.com
+        port: 5432
+
+    pgbouncer_max_client_conn: 300
+    pgbouncer_max_db_connections: 300
+    pgbouncer_max_user_connections: 300
+
+    # govern how many backend connections
+    pgbouncer_default_pool_size: 80
+
+  roles:
+    # This deploys psql and sets up the pgdg repo this ensures that a new pgbouncer is installed and psql can be used to administer it
+    - ansible-postgresql-client
+    - ansible-pgbouncer
+
 
 Debugging
 ---------
