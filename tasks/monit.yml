@@ -17,6 +17,7 @@
 - monit:
     name: pgbouncer
     state: started
+  ignore_errors: true
 
 
 
