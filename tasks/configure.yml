@@ -60,6 +60,7 @@
     group: "{{ pgbouncer_group }}"
     mode: 0640
     content: |
+      "stats" "passwordless"
       {% for user in pgbouncer_users %}
       "{{ user.name }}" "md5{{ (user.pass + user.name) | hash('md5') }}"
       {% endfor %}

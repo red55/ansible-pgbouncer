@@ -12,6 +12,12 @@ pgbouncer_hba_default:
     user: all
     address: ""
     method: trust
+  - comment: trust passwordless local IPv4 connections to the stats table
+    type: host
+    database: pgbouncer
+    user: stats
+    address: "127.0.0.1/32"
+    method: trust
   - comment: local IPv4 connections
     type: host
     database: all
@@ -41,7 +47,7 @@ pgbouncer_listen_port: 6432
 pgbouncer_unix_socket_dir: /var/run/postgresql
 pgbouncer_unix_socket_mode: 0755
 pgbouncer_unix_socket_group: "{{ pgbouncer_group }}"
-# allow peer logins for admin and stats as the postgres user
+# allow ident logins for admin and stats as the postgres user
 pgbouncer_auth_type: hba
 pgbouncer_auth_file: /etc/pgbouncer/userlist.txt
 pgbouncer_auth_hba_file: /etc/pgbouncer/pgbouncer_hba.conf
@@ -54,6 +60,7 @@ pgbouncer_admin_users:
 pgbouncer_stats_users:
   - postgres
   - root
+  - stats
 
 pgbouncer_pool_mode: session
 pgbouncer_server_reset_query: DISCARD ALL
