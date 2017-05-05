@@ -1,0 +1,28 @@
+- name: ensure collectd is running
+  service:
+    name: collectd
+    state: started
+
+- name: make "/var/lib/collectd/python/"
+  file:
+    path: /var/lib/collectd/python
+    state: directory
+
+- name: copy pgbouncer_info plugin up
+  copy:
+    dest: /var/lib/collectd/python/pgbouncer_info.py
+    src: files/pgbouncer_info.py
+
+- name: setup collectd monitoring file
+  copy:
+    dest: /etc/collectd/config.d/pgbouncer_info.conf
+    content: |
+      <Plugin python>
+        ModulePath "/var/lib/collectd/python/"
+        Import "pgbouncer_info"
+
+        <Module pgbouncer_info>
+        </Module>
+      </Plugin>
+  notify: restart collectd
+

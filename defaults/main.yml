@@ -12,6 +12,12 @@ pgbouncer_hba_default:
     user: all
     address: ""
     method: trust
+  - comment: trust passwordless local IPv4 connections to the stats table
+    type: host
+    database: pgbouncer
+    user: stats
+    address: "127.0.0.1/32"
+    method: trust
   - comment: local IPv4 connections
     type: host
     database: all
@@ -41,6 +47,7 @@ pgbouncer_listen_port: 6432
 pgbouncer_unix_socket_dir: /var/run/postgresql
 pgbouncer_unix_socket_mode: 0755
 pgbouncer_unix_socket_group: "{{ pgbouncer_group }}"
+# allow ident logins for admin and stats as the postgres user
 pgbouncer_auth_type: hba
 pgbouncer_auth_file: /etc/pgbouncer/userlist.txt
 pgbouncer_auth_hba_file: /etc/pgbouncer/pgbouncer_hba.conf
@@ -53,11 +60,12 @@ pgbouncer_admin_users:
 pgbouncer_stats_users:
   - postgres
   - root
+  - stats
 
 pgbouncer_pool_mode: session
 pgbouncer_server_reset_query: DISCARD ALL
 pgbouncer_server_reset_query_always: 0
-pgbouncer_ignore_startup_parameters: extra_float_digits
+pgbouncer_ignore_startup_parameters: extra_float_digits,application_name
 pgbouncer_server_check_query: select 1
 pgbouncer_server_check_delay: 30
 pgbouncer_application_name_add_host: 0
@@ -66,8 +74,8 @@ pgbouncer_default_pool_size: 20
 pgbouncer_min_pool_size: 0
 pgbouncer_reserve_pool_size: 0
 pgbouncer_reserve_pool_timeout: 5
-pgbouncer_max_db_connections: unlimited
-pgbouncer_max_user_connections: unlimited
+pgbouncer_max_db_connections: 50
+pgbouncer_max_user_connections: 50
 pgbouncer_server_round_robin: 0
 pgbouncer_syslog: 0
 pgbouncer_syslog_facility: daemon

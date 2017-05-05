@@ -9,3 +9,7 @@
 - include: monit.yml
   when: monit_protection is defined and monit_protection == true
   tags: [pgbouncer, pgbouncer-monit]
+
+- include: collectd.yml
+  when: collectd_monitoring is defined and collectd_monitoring == true
+  tags: [pgbouncer, pgbouncer-collectd]
