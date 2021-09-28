@@ -292,10 +292,12 @@ disable_pqexec = {{ pgbouncer_disable_pqexec }}
 ;; By default contains config file from command line.
 ;conffile
 
+{% if ansible_os_family == 'Windows' %}
 ;; Win32 service name to register as.  job_name is alias for service_name,
 ;; used by some Skytools scripts.
 service_name = {{ pgbouncer_service_name }}
 job_name = {{ pgbouncer_job_name }}
+{% endif %}
 
 ;; Read additional config from the /etc/pgbouncer/pgbouncer-other.ini file
 ;%include /etc/pgbouncer/pgbouncer-other.ini
